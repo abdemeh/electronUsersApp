@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!----======== CSS ======== -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!----===== Boxicons CSS ===== -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="assets/img/logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name">electronApp</span>
+                    <span class="profession">v1.0.0</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+            </div>
+
+            <div class="bottom-content">
+                <li class="">
+                    <a href="#">
+                        <i class='bx bx-info-circle icon' ></i>
+                        <span class="text nav-text">À propos</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home">
+        <div class="text">Connectez vous</div>
+        <div class="container">
+            <div class="row">
+              <div class="col-md-6 offset-md-3">
+                <div class="">
+                    <form id="login-form">
+                      <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                      </div>
+                      <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                      </div>
+                      <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Login</button>
+                      </div>
+                    </form>
+                    <div id="error-message" class="text-danger mt-3"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </section>
+
+    <script>
+        const form = document.getElementById('login-form');
+        const errorMessage = document.getElementById('error-message');
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            window.electron.send('login', { username, password });
+
+            window.electron.receive('login-response', (response) => {
+                if (response.success) {
+                    window.location.href = 'index.html';
+                } else {
+                    errorMessage.textContent = response.message;
+                }
+            });
+        });
+    </script>
+    <script src="assets/js/bootstrap.min.js"></script>
+</body>
+</html>

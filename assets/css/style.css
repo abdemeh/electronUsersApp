@@ -9,12 +9,14 @@
 
 :root{
     /* ===== Colors ===== */
-    --body-color: #E4E9F7;
+    --body-color: #e8e9ec;
     --sidebar-color: #FFF;
-    --primary-color: #695CFE;
+    --primary-color: #7e2a8a;
     --primary-color-light: #F6F5FF;
     --toggle-color: #DDD;
     --text-color: #707070;
+    --bs-primary: var(--primary-color) !important;
+    --bs-primary-hover: #752380 !important;
 
     /* ====== Transition ====== */
     --tran-03: all 0.2s ease;
@@ -306,4 +308,14 @@ body.dark .switch::before{
 }
 body.dark .home .text{
     color: var(--text-color);
+}
+.active{
+    background-color: var(--primary-color);
+    color: var(--sidebar-color);
+    border-radius: 6px;
+}
+.active span, .active i{
+    background-color: var(--primary-color);
+    color: var(--sidebar-color) !important;
+    border-radius: 6px; 
 }
