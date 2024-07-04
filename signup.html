@@ -45,25 +45,33 @@
     </nav>
 
     <section class="home">
-        <div class="text">Connectez vous</div>
+        <div class="text">Créer un compte</div>
         <div class="container">
             <div class="row">
               <div class="col-md-6 offset-md-3">
                 <div class="">
-                    <form id="login-form">
+                    <form id="signup-form">
+                      <div class="mb-3">
+                        <label for="nom" class="form-label">Nom</label>
+                        <input type="text" class="form-control" id="nom" name="nom" required>
+                      </div>
+                      <div class="mb-3">
+                        <label for="prenom" class="form-label">Prénom</label>
+                        <input type="text" class="form-control" id="prenom" name="prenom" required>
+                      </div>
                       <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" id="email" name="email" required>
                       </div>
                       <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
+                        <label for="password" class="form-label">Mot de passe</label>
                         <input type="password" class="form-control" id="password" name="password" required>
                       </div>
                       <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Login</button>
+                        <button type="submit" class="btn btn-primary">S'inscrire</button>
                       </div>
                     </form>
-                    <div class="text-link mt-3"><a href="signup.html">Créer un compte</a></div>
+                    <div class="text-link mt-3"><a href="login.html">Retour à la connexion</a></div>
                     <div id="error-message" class="text-danger mt-3"></div>
                 </div>
               </div>
@@ -72,17 +80,19 @@
     </section>
 
     <script>
-        const form = document.getElementById('login-form');
+        const form = document.getElementById('signup-form');
         const errorMessage = document.getElementById('error-message');
 
         form.addEventListener('submit', (event) => {
             event.preventDefault();
+            const nom = document.getElementById('nom').value;
+            const prenom = document.getElementById('prenom').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             
-            window.electron.send('login', { email, password });
+            window.electron.send('signup', { nom, prenom, email, password });
 
-            window.electron.receive('login-response', (response) => {
+            window.electron.receive('signup-response', (response) => {
                 if (response.success) {
                     window.location.href = 'index.html';
                 } else {
