@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="assets/img/logo.png" alt="">
+                </span>
+                <div class="text logo-text">
+                    <span class="name">electronApp</span>
+                    <span class="profession">v1.0.0</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="">
+                        <a href="index.html">
+                            <i class='bx bx-home-alt icon'></i>
+                            <span class="text nav-text">Accueil</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li class="active nav-link">
+                    <a href="#">
+                        <i class='bx bx-user icon'></i>
+                        <span class="text nav-text">Profil</span>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="login.html">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text nav-text">Déconnecter</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+    <section class="home">
+        <div class="text">Mon profil</div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="">
+                        <form id="profile-form">
+                            <div class="mb-3">
+                                <label for="nom" class="form-label">Nom</label>
+                                <input type="text" class="form-control" id="nom" name="nom" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="prenom" class="form-label">Prénom</label>
+                                <input type="text" class="form-control" id="prenom" name="prenom" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Nouveau mot de passe</label>
+                                <input type="password" class="form-control" id="password" name="password">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                        </form>
+                        <div id="save-message" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            window.electron.invoke('get-user-data')
+                .then((data) => {
+                    if (data) {
+                        document.getElementById('nom').value = data.nom;
+                        document.getElementById('prenom').value = data.prenom;
+                        document.getElementById('email').value = data.email;
+                        console.log('User data populated:', data);
+                    } else {
+                        console.error('No user data found.');
+                    }
+                })
+                .catch((err) => {
+                    console.error('Error fetching user data:', err.message);
+                });
+        });
+
+        document.getElementById('profile-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const nom = document.getElementById('nom').value;
+            const prenom = document.getElementById('prenom').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            window.electron.send('save-user-data', { nom, prenom, email, password });
+
+            window.electron.receive('save-user-response', (response) => {
+                const saveMessage = document.getElementById('save-message');
+                if (response.success) {
+                    saveMessage.textContent = 'Profil mis à jour avec succès!';
+                    saveMessage.classList.remove('text-danger');
+                    saveMessage.classList.add('text-success');
+                } else {
+                    saveMessage.textContent = 'Échec de la mise à jour du profil: ' + response.message;
+                    saveMessage.classList.remove('text-success');
+                    saveMessage.classList.add('text-danger');
+                }
+            });
+        });
+    </script>
+    <script>
+        const body = document.querySelector('body'),
+        sidebar = body.querySelector('nav'),
+        toggle = body.querySelector(".toggle"),
+        searchBtn = body.querySelector(".search-box"),
+        modeSwitch = body.querySelector(".toggle-switch"),
+        modeText = body.querySelector(".mode-text");
+        toggle.addEventListener("click" , () =>{
+            sidebar.classList.toggle("close");
+        })
+        searchBtn.addEventListener("click" , () =>{
+            sidebar.classList.remove("close");
+        })
+        modeSwitch.addEventListener("click" , () =>{
+            body.classList.toggle("dark");
+            if(body.classList.contains("dark")){
+                modeText.innerText = "Light mode";
+            }else{
+                modeText.innerText = "Dark mode";
+                
+            }
+        });
+    </script>
+    <script src="assets/js/bootstrap.min.js"></script>
+</body>
+</html>

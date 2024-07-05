@@ -1,0 +1,32 @@
+{
+  "name": "gestion-electron",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^31.1.0",
+    "electron-builder": "^22.14.13"
+  },
+  "build": {
+    "appId": "com.yourname.gestion-electron",
+    "productName": "Gestion Electron",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "icon": "assets/img/icon.ico"
+    }
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "electron-debug": "^4.0.0",
+    "sqlite3": "^5.1.7"
+  }
+}
